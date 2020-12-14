@@ -1,31 +1,40 @@
-# changes file
-*.changes
-*.chg
+*.log
+*.xml
+target
+/target/*.*
+/src/main/resources/*.log
 
-# system image
-*.image
-*.img7
-*.img
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
 
-# Pharo Smalltalk Debug log file
-PharoDebug.log
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
 
-# Squeak Smalltalk Debug log file
-SqueakDebug.log
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+*.jar
 
-# Dolphin Smalltalk source file
-*.sml
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-# Dolphin Smalltalk error file
-*.errors
-
-# Monticello package cache
-/package-cache
-
-# playground cache
-/play-cache
-/play-stash
-
-# Metacello-github cache
-/github-cache
-github-*.zip
+### VS Code ###
+.vscode/
