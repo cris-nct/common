@@ -11,23 +11,21 @@ import java.io.FileWriter;
 @Slf4j
 public class UpdateProperties {
 
-    private static final String APPLICATION_PROPERTIES = "application.properties";
-
-    public static void updateApplicationProperties() {
+    public static void updateApplicationProperties(String propertiesFile) {
         try {
-            File applicationPropFile = new File(APPLICATION_PROPERTIES);
+            File applicationPropFile = new File(propertiesFile);
             if (!applicationPropFile.exists()) {
-                log.warn(APPLICATION_PROPERTIES + " is missing");
+                log.warn(propertiesFile + " is missing");
                 return;
             }
 
-            log.info("Updating " + APPLICATION_PROPERTIES);
+            log.info("Updating " + propertiesFile);
             final PropertyFile currentFileWorkDir = new PropertyFile();
             currentFileWorkDir.load(new FileInputStream(applicationPropFile));
 
             final PropertyFile sourceCodeProperties = new PropertyFile();
             ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-            sourceCodeProperties.load(contextClassLoader.getResourceAsStream(APPLICATION_PROPERTIES));
+            sourceCodeProperties.load(contextClassLoader.getResourceAsStream(propertiesFile));
 
             //Add missing properties
             for (String propName : currentFileWorkDir.getKeys()) {
@@ -46,10 +44,10 @@ public class UpdateProperties {
                 }
             }
 
-            sourceCodeProperties.save(new FileWriter(APPLICATION_PROPERTIES));
+            sourceCodeProperties.save(new FileWriter(propertiesFile));
             log.info("Updated successfully");
         } catch (Exception e) {
-            log.error("Can not update " + APPLICATION_PROPERTIES + " file", e);
+            log.error("Can not update " + propertiesFile + " file", e);
         } finally {
             Util.sleep(2000);
         }
