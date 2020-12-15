@@ -2,19 +2,19 @@ package properties;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.FileInputStream;
 import java.io.FileWriter;
-import java.io.InputStream;
 
 @Slf4j
 public class UpdateProperties {
 
-    public static void updateApplicationProperties(InputStream source, String filename) {
+    public static void updateApplicationProperties(String filename) {
         try {
             log.info("Updating " + filename);
             final PropertyFile currentFileWorkDir = new PropertyFile();
-            currentFileWorkDir.load(source);
+            currentFileWorkDir.load(new ClassPathResource(filename).getInputStream());
 
             final PropertyFile sourceCodeProperties = new PropertyFile();
             sourceCodeProperties.load(new FileInputStream(filename));
