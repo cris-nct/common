@@ -1,5 +1,6 @@
+package util;
+
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -8,8 +9,11 @@ import java.io.IOException;
 @Slf4j
 public class VBMessageBox {
 
-    @Value("${spring.application.name}")
-    private String appName;
+    private final String appName;
+
+    public VBMessageBox(String appName) {
+        this.appName = appName;
+    }
 
     public void displayErrorMessage(String msg, boolean waitToClose) {
         displayMessage(16, msg, waitToClose);
