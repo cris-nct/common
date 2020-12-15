@@ -3,28 +3,21 @@ package properties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.InputStream;
 
 @Slf4j
 public class UpdateProperties {
 
-    public static void updateApplicationProperties(String propertiesFile) {
+    public static void updateApplicationProperties(InputStream source, String filename) {
         try {
-            File applicationPropFile = new File(propertiesFile);
-            if (!applicationPropFile.exists()) {
-                log.warn(propertiesFile + " is missing");
-                return;
-            }
-
-            log.info("Updating " + propertiesFile);
+            log.info("Updating " + filename);
             final PropertyFile currentFileWorkDir = new PropertyFile();
-            currentFileWorkDir.load(new FileInputStream(applicationPropFile));
+            currentFileWorkDir.load(source);
 
             final PropertyFile sourceCodeProperties = new PropertyFile();
-            ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-            sourceCodeProperties.load(contextClassLoader.getResourceAsStream(propertiesFile));
+            sourceCodeProperties.load(new FileInputStream(filename));
 
             boolean change = false;
             //Add missing properties
@@ -47,13 +40,13 @@ public class UpdateProperties {
                         sourceCodeProperties.setProperty(propName, propFileValue);
                     }
                 }
-                sourceCodeProperties.save(new FileWriter(propertiesFile));
+                sourceCodeProperties.save(new FileWriter(filename));
                 log.info("Updated successfully");
             } else {
-                log.info("no changes to " + propertiesFile);
+                log.info("no changes to " + filename);
             }
         } catch (Exception e) {
-            log.error("Can not update " + propertiesFile + " file", e);
+            log.error("Can not update " + filename + " file", e);
         }
     }
 
