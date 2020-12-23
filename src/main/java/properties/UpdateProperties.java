@@ -13,34 +13,24 @@ public class UpdateProperties {
     public static void updateApplicationProperties(String filename) {
         try {
             log.info("Updating " + filename);
-            final PropertyFile currentFileWorkDir = new PropertyFile();
-            currentFileWorkDir.load(new ClassPathResource(filename).getInputStream());
+            final PropertyFile sourcecodeFile = new PropertyFile();
+            sourcecodeFile.load(new ClassPathResource(filename).getInputStream());
 
-            final PropertyFile sourceCodeProperties = new PropertyFile();
-            sourceCodeProperties.load(new FileInputStream(filename));
+            final PropertyFile propertiesFile = new PropertyFile();
+            propertiesFile.load(new FileInputStream(filename));
 
             boolean change = false;
             //Add missing properties
-            for (String propName : currentFileWorkDir.getKeys()) {
-                String propValue = currentFileWorkDir.getProperty(propName);
-                if (StringUtils.isBlank(sourceCodeProperties.getProperty(propName))) {
+            for (String propName : sourcecodeFile.getKeys()) {
+                String propValue = sourcecodeFile.getProperty(propName);
+                if (StringUtils.isBlank(propertiesFile.getProperty(propName))) {
                     log.debug("Adding missing property: " + propName);
-                    sourceCodeProperties.addProperty(propName, propValue);
+                    propertiesFile.addProperty(propName, propValue);
                     change = true;
                 }
             }
-
-            //Add to sourceCodeProperties the values which are different in currentFileWorkDir
             if (change) {
-                for (String propName : sourceCodeProperties.getKeys()) {
-                    String sourceCodeValue = sourceCodeProperties.getProperty(propName);
-                    String propFileValue = currentFileWorkDir.getProperty(propName);
-                    if (!StringUtils.equals(sourceCodeValue, propFileValue)
-                            && StringUtils.isNotBlank(propFileValue)) {
-                        sourceCodeProperties.setProperty(propName, propFileValue);
-                    }
-                }
-                sourceCodeProperties.save(new FileWriter(filename));
+                propertiesFile.save(new FileWriter(filename));
                 log.info("Updated successfully");
             } else {
                 log.info("no changes to " + filename);
